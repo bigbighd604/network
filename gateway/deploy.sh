@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-#if [[ $UID -ne 0 ]]; then
-#	echo "This script requires root permission!"
-#	exit
-#fi
+if [[ $UID -ne 0 ]]; then
+	echo "This script requires root permission!"
+	exit
+fi
 
 packages=(squid3 squidguard)
 
+# TODO: need fix package install detection, current method
+# will fail if package was installed and then removed.
 for pkg in ${packages[@]}; do
 	ret=$(dpkg -S $pkg >/dev/null 2>&1; echo $?)
 	if [[ $ret -ne 0 ]]; then
@@ -18,6 +20,7 @@ BASEDIR=$(dirname $0)
 echo $BASEDIR
 
 cp ${BASEDIR}/etc/squidguard/squidGuard.conf /etc/squidguard/
+cp -R ${BASEDIR}/var/lib/squidguard/db/ /var/lib/squidguard/db/
 cp ${BASEDIR}/etc/squid3/squid.conf /etc/squid3/
 
 # Compile database
@@ -30,4 +33,5 @@ chown -R proxy:proxy /var/log/squidguard
 chown -R proxy:proxy /usr/bin/squidGuard
 chmod -R 755 /var/lib/squidguard/db
 
-service squid3 reload
+echo "Restart squid3 ..."
+service squid3 restart
