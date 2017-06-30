@@ -20,7 +20,7 @@ BASEDIR=$(dirname $0)
 echo $BASEDIR
 
 cp ${BASEDIR}/etc/squidguard/squidGuard.conf /etc/squidguard/
-cp -R ${BASEDIR}/var/lib/squidguard/db/ /var/lib/squidguard/db/
+cp -R ${BASEDIR}/var/lib/squidguard/db /var/lib/squidguard/
 cp ${BASEDIR}/etc/squid3/squid.conf /etc/squid3/
 
 # Compile database
